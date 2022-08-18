@@ -30,7 +30,7 @@ const defaultValues = {
   passwordConfirm: '',
 };
 
-function SignUp() {
+const SignUp = () => {
   const { control, formState, handleSubmit, reset } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -39,13 +39,15 @@ function SignUp() {
 
   const { isValid, dirtyFields, errors, setError } = formState;
 
-  function onSubmit({ password, email }) {
+  function onSubmit({ email, password }) {
+    const newUser = {
+      name: email,
+      pass: password,
+      Rpass: password,
+    };
+
     jwtService
-      .createUser({
-        name: email,
-        pass: password,
-        Rpass: password,
-      })
+      .createUser(newUser)
       .then((user) => {
         // No need to do anything, registered user data will be set at app/auth/AuthContext
       })
@@ -167,6 +169,6 @@ function SignUp() {
       </Box>
     </div>
   );
-}
+};
 
 export default SignUp;

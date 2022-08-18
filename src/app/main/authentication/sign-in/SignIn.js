@@ -5,13 +5,12 @@ import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
 import { Box } from '@mui/system';
-import { useAppDispatch } from 'app/store/hooks';
 import jwtService from '../../../auth/services/jwtService';
 
 /**
@@ -20,11 +19,11 @@ import jwtService from '../../../auth/services/jwtService';
 const schema = yup.object().shape({
   email: yup
     .string()
-    .email('Você precisa informar um e-mail válido')
+    .email('Você precisa informar um email válido')
     .required('Você deve inserir um e-mail'),
   password: yup
     .string()
-    .required('Por favor insira uma senha')
+    .required('Por favor, insira sua senha.')
     .min(5, 'A senha é muito curta - deve ter pelo menos 5 caracteres.'),
 });
 
@@ -33,15 +32,12 @@ const defaultValues = {
   password: '',
 };
 
-function SignIn() {
+const SignIn = () => {
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   });
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const { isValid, dirtyFields, errors } = formState;
 
@@ -154,6 +150,6 @@ function SignIn() {
       </Paper>
     </div>
   );
-}
+};
 
 export default SignIn;

@@ -47,7 +47,7 @@ const TarefasHeader: React.FC<TarefasHeaderProps> = ({ title, showInput }) => {
           </Paper>
         )}
 
-        <CustomButton color="primary" title="Adicionar Tarefa" icon={<AddIcon />} path="/sing-in" />
+        <CustomButton color="primary" title="Adicionar Tarefa" icon={<AddIcon />} />
 
         <motion.div
           initial={{ opacity: 0, x: 20 }}

@@ -86,7 +86,7 @@ const initialState = {
   role: [], // guest
   data: {
     id: '',
-    displayName: '',
+    name: '',
     photoURL: '',
     email: '',
     shortcuts: [],

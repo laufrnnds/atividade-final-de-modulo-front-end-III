@@ -13,9 +13,10 @@ interface TarefasProps {
 
 const Tarefas: React.FC<TarefasProps> = ({ property }) => {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+
   return (
     <FusePageCarded
-      header={<TarefasHeader title="Lista de Tarefas" showInput />}
+      header={<TarefasHeader title="Lista de Tarefas" />}
       content={
         <>
           <Typography variant="body1" sx={{ padding: '30px' }}>

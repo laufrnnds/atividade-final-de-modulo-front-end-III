@@ -30,7 +30,7 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   handleAuthentication = () => {
-    const userLogged = this.getAccessToken();
+    const userLogged = this.getUserLogged();
 
     if (!userLogged) {
       this.emit('onNoAccessToken');
@@ -43,18 +43,26 @@ class JwtService extends FuseUtils.EventEmitter {
       this.emit('onAutoLogin', true);
     } else {
       this.setSession(null);
-      this.emit('onAutoLogout', 'access_token expired');
+      this.emit('onAutoLogout', 'Sessão Expirada, faça login novamente.');
     }
   };
 
-  createUser = (data) => {
+  createUser = (novoUsuario) => {
     return new Promise((resolve, reject) => {
-      axios.post(jwtServiceConfig.signUp, data).then((response) => {
+      axios.post(jwtServiceConfig.signUp, novoUsuario).then((response) => {
         if (response.data.ok) {
-          const newUser = response.data.data;
+          // se ok: true
+          const { data } = response.data;
+          const newUser = {
+            id: data.id,
+            name: data.name,
+            email: data.name,
+            token: '',
+          };
           resolve(newUser);
-          this.emit('onLogin', newUser);
+          this.emit('onSignUp', newUser);
         } else {
+          // ok: false
           reject(response.data.error);
         }
       });
@@ -69,28 +77,43 @@ class JwtService extends FuseUtils.EventEmitter {
           pass: password,
         })
         .then((response) => {
+          // validar a resposta
           if (response.data.ok) {
-            const dadosUsuario = response.data.data; // {userId: '', userName: '', token: ''}
-            const newDataStorage = {
-              id: dadosUsuario.userId,
-              name: dadosUsuario.userName,
-              email: dadosUsuario.userName,
-              token: dadosUsuario.token,
+            const user = response.data.data;
+            const userLogged = {
+              id: user.userId,
+              name: user.userName,
+              email: user.userName,
+              token: user.token,
             };
 
-            this.setSession(newDataStorage);
-            resolve(dadosUsuario);
+            this.setSession(userLogged);
 
-            this.emit('onLogin', newDataStorage);
+            resolve(userLogged);
+
+            // dispara o emiter que dispara o sucess que dispara o dispatch com setUser()
+            this.emit('onLogin', userLogged);
           } else {
             reject(response.data.error);
           }
+        })
+        .catch((error) => {
+          if (error.response.status === 403) {
+            this.emit('onPasswordIncorrect', error.response.data.error);
+          }
+
+          if (error.response.status === 404) {
+            this.emit('onUserNotFound', error.response.data.error);
+          }
+
+          this.emit('onServerError', error.response.data.error);
         });
     });
   };
 
   signInWithToken = () => {
-    const userLogged = this.getAccessToken();
+    const userLogged = this.getUserLogged();
+
     if (userLogged) {
       this.setSession(userLogged);
       return {
@@ -98,8 +121,10 @@ class JwtService extends FuseUtils.EventEmitter {
         userLogged,
       };
     }
+
+    // quando não achou usuário no localStorage
     this.logout();
-    const error = 'Failed to login with token.';
+    const error = 'Falha ao logar com o token.';
     return {
       ok: false,
       error,
@@ -107,6 +132,7 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   setSession = (userLogged) => {
+    // { id: '', name: '', email: '', token: ''}
     if (userLogged) {
       localStorage.setItem('userLogged', JSON.stringify(userLogged));
     } else {
@@ -133,10 +159,10 @@ class JwtService extends FuseUtils.EventEmitter {
     return true;
   };
 
-  getAccessToken = () => {
-    // jwt_access_token;
+  getUserLogged = () => {
+    // era uma string jwt_access_token, mudou para um objeto com todos os dados do usuario logado
     const userLogged = JSON.parse(localStorage.getItem('userLogged'));
-    return userLogged;
+    return userLogged; // se existir retorna o objeto / se não existir retorna null
   };
 }
 
