@@ -16,12 +16,15 @@ import jwtService from '../../../auth/services/jwtService';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  email: yup.string().email('Insira um e-mail válido').required('Insira um e-mail'),
+  email: yup
+    .string()
+    .email('Você deve inserir um e-mail válido')
+    .required('Você deve inserir um e-mail'),
   password: yup
     .string()
-    .required('Insira uma senha')
-    .min(5, 'A senha é muito curta - deve ter pelo menos 5 caracteres.'),
-  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'As senhas não correspodem'),
+    .required('Por favor, insira sua senha.')
+    .min(5, 'A senha é muito curta - deve ter no mínimo 5 caracteres.'),
+  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'As senhas devem corresponder'),
 });
 
 const defaultValues = {
@@ -40,12 +43,14 @@ const SignUp = () => {
   const { isValid, dirtyFields, errors, setError } = formState;
 
   function onSubmit({ email, password }) {
+    // cria o objeto do novo usuario que sera enviado a API
     const newUser = {
       name: email,
       pass: password,
       Rpass: password,
     };
 
+    // executa a função de chamada da api para criação do novo Usuário
     jwtService
       .createUser(newUser)
       .then((user) => {

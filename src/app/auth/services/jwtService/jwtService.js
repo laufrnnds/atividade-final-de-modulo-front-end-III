@@ -49,23 +49,32 @@ class JwtService extends FuseUtils.EventEmitter {
 
   createUser = (novoUsuario) => {
     return new Promise((resolve, reject) => {
-      axios.post(jwtServiceConfig.signUp, novoUsuario).then((response) => {
-        if (response.data.ok) {
-          // se ok: true
-          const { data } = response.data;
-          const newUser = {
-            id: data.id,
-            name: data.name,
-            email: data.name,
-            token: '',
-          };
-          resolve(newUser);
-          this.emit('onSignUp', newUser);
-        } else {
+      axios
+        .post(jwtServiceConfig.signUp, novoUsuario)
+        .then((response) => {
+          if (response.data.ok) {
+            // se ok: true
+            const { data } = response.data;
+            const newUser = {
+              id: data.id,
+              name: data.name,
+              email: data.name,
+              token: '',
+            };
+            resolve(newUser);
+            this.emit('onSignUp', newUser, true);
+          } else {
+            // ok: false
+            reject(response.data.error);
+            this.emit('onSignUp', {}, false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
           // ok: false
-          reject(response.data.error);
-        }
-      });
+          reject(error);
+          this.emit('onSignUp', {}, false);
+        });
     });
   };
 

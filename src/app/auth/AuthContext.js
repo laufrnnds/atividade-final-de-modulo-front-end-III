@@ -35,16 +35,21 @@ function AuthProvider({ children }) {
       success(newUser, `Bem-vindo(a) ${newUser.name}!`);
     });
 
-    jwtService.on('onSignUp', (newUser) => {
-      newUser.signUp = true;
-      success(newUser, 'Conta criada com sucesso! Você será redirecionado automaticamente');
+    jwtService.on('onSignUp', (newUser, sucesso) => {
+      if (sucesso) {
+        newUser.signUp = true;
+        success(newUser, 'Conta criada com sucesso! Você será redirecionado automaticamente');
 
-      // parecido com o window.location.href = '/sign-in'
-      setTimeout(() => {
-        history.push({
-          pathname: '/sign-in',
-        });
-      }, 1000);
+        // parecido com o window.location.href = '/sign-in'
+        setTimeout(() => {
+          history.push({
+            pathname: '/sign-in',
+          });
+        }, 1000);
+      } else {
+        newUser.signUp = true;
+        success(newUser, 'Conta já existe!Verifique e tente novamente');
+      }
     });
 
     jwtService.on('onLogout', () => {
