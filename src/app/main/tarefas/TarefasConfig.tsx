@@ -1,8 +1,7 @@
 import { authRoles } from 'app/auth';
 import { lazy } from 'react';
 
-const Tarefas = lazy(() => import('./list/Tarefas'));
-const Tarefa = lazy(() => import('./detail/Tarefa'));
+const Tarefas = lazy(() => import('./Tarefas'));
 
 const TarefasConfig = {
   settings: {
@@ -22,10 +21,6 @@ const TarefasConfig = {
     {
       path: 'tarefas',
       element: <Tarefas />,
-    },
-    {
-      path: 'tarefas/:id',
-      element: <Tarefa />,
     },
   ],
 };

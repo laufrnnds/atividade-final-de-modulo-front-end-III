@@ -4,8 +4,8 @@ import FusePageCarded from '@fuse/core/FusePageCarded';
 import { useThemeMediaQuery } from '@fuse/hooks';
 import { Typography } from '@mui/material';
 import React from 'react';
-import TarefasContent from './TarefaContent';
-import TarefasHeader from './TarefasHeader';
+import TarefasContent from './components/TarefaContent';
+import TarefasHeader from './components/TarefasHeader';
 
 interface TarefasProps {
   property?: string;
@@ -20,7 +20,7 @@ const Tarefas: React.FC<TarefasProps> = ({ property }) => {
       content={
         <>
           <Typography variant="body1" sx={{ padding: '30px' }}>
-            Essas são suas tarefas ainda não cumpridas.
+            Essas são suas tarefas
           </Typography>
           <TarefasContent />
         </>

@@ -1,6 +1,16 @@
+/* eslint-disable camelcase */
 export interface Tarefa {
-  uid: string;
-  title: string;
+  id: string;
+  description: string;
+  detail: string;
+  user_id?: string;
+  create_at: Date;
+  updated_at: Date;
 }
 
-export type Tarefas = Tarefa[];
+export interface Dado {
+  id?: string;
+  description: string;
+  detail: string;
+  token?: string;
+}
