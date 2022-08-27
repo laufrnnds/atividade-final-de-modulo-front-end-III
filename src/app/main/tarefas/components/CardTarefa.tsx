@@ -13,18 +13,6 @@ import { selectUser } from 'app/store/userSlice';
 import ModalTarefa from './ModalTarefa';
 import { deletarTarefa, excluirTarefa } from '../store/TarefasSlice';
 
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '0px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
 interface CardTarefaProps {
   id: string;
   description: string;
@@ -57,9 +45,13 @@ const CardTarefa: React.FC<CardTarefaProps> = ({ id, description, detail }) => {
     <>
       <Card
         sx={{
+          minWidth: 300,
           maxWidth: 300,
           backgroundColor: '#d3c3a2',
           color: '#689990',
+          maxHeight: 400,
+          minHeight: 150,
+          marginBottom: '15px',
         }}
         id={id}
       >

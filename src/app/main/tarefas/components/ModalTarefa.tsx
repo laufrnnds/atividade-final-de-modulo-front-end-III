@@ -5,6 +5,7 @@ import { Box, FormGroup, Grid, Modal, TextField, Typography } from '@mui/materia
 import React, { useEffect, useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import { useAppDispatch, useAppSelector } from 'app/store/hooks';
 import { selectUser } from 'app/store/userSlice';
 import CustomButton from './CustomButton';
@@ -146,9 +147,9 @@ const ModalTarefa: React.FC<ModalTarefaProps> = ({ openModal, id, criar, actionC
                 <>
                   <CustomButton
                     color="primary"
-                    title="Criar Tarefa"
+                    title="Adicionar"
                     onClick={handleCriar}
-                    icon={<SaveIcon />}
+                    icon={<AddIcon />}
                   />
                 </>
               ) : (
